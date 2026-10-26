@@ -3,8 +3,7 @@ import UIKit
 final class SingleImageViewController: UIViewController {
     var image: UIImage? {
         didSet {
-            guard isViewLoaded else { return }
-            guard let image = image else { return }
+            guard isViewLoaded, let image else { return }
             
             imageView.image = image
             imageView.frame = CGRect(origin: .zero, size: image.size)
@@ -26,7 +25,6 @@ final class SingleImageViewController: UIViewController {
         
         guard let image = image else { return }
         imageView.image = image
-//      imageView.frame.size = image.size
         imageView.frame = CGRect(origin: .zero, size: image.size)
         rescaleAndCenterImageInScrollView(image: image)
     }
@@ -37,13 +35,13 @@ final class SingleImageViewController: UIViewController {
     
     @IBAction func didTapShareButton() {
         guard let image = image else { return }
-            let activityViewController = UIActivityViewController(
-                activityItems: [image],
-                applicationActivities: nil
-            )
-            activityViewController.overrideUserInterfaceStyle = .dark
-            present(activityViewController, animated: true)
-        }
+        let activityViewController = UIActivityViewController(
+            activityItems: [image],
+            applicationActivities: nil
+        )
+        activityViewController.overrideUserInterfaceStyle = .dark
+        present(activityViewController, animated: true)
+    }
     
     
     
@@ -76,7 +74,7 @@ final class SingleImageViewController: UIViewController {
     private func centerImageInScrollView() {
         let visibleSize = scrollView.bounds.size
         let contentSize = scrollView.contentSize
-
+        
         let horizontalInset = max(
             0,
             (visibleSize.width - contentSize.width) / 2
@@ -85,7 +83,7 @@ final class SingleImageViewController: UIViewController {
             0,
             (visibleSize.height - contentSize.height) / 2
         )
-
+        
         scrollView.contentInset = UIEdgeInsets(
             top: verticalInset,
             left: horizontalInset,
@@ -96,7 +94,7 @@ final class SingleImageViewController: UIViewController {
 
 extension SingleImageViewController: UIScrollViewDelegate {
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-        return imageView
+        imageView
     }
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
